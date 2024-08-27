@@ -38,3 +38,6 @@ async function main() {
 }
 
 main();
+
+
+//worker will consume the kafka topic and carry out actions accordingly
