@@ -47,3 +47,4 @@ function main() {
     });
 }
 main();
+//processor will take the record from outbox and push in the kafka
