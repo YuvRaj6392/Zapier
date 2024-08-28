@@ -32,7 +32,7 @@ function main() {
                     value: (_b = message.value) === null || _b === void 0 ? void 0 : _b.toString(),
                 });
                 //
-                yield new Promise((r) => setTimeout(r, 5000));
+                yield new Promise((r) => setTimeout(r, 500));
                 console.log('processing done');
                 //you can do your action operation here!
                 //

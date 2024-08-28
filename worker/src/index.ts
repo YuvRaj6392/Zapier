@@ -22,7 +22,7 @@ async function main() {
         value: message.value?.toString(),
       });
       //
-      await new Promise((r) => setTimeout(r, 5000));
+      await new Promise((r) => setTimeout(r, 500));
       console.log('processing done')
       //you can do your action operation here!
 
