@@ -46,7 +46,7 @@ exports.userRouter.post("/signup", (req, res) => __awaiter(void 0, void 0, void 
         },
     });
     return res.json({
-        msg: "Please verify your account",
+        msg: "Please verify your account by opening email!",
     });
 }));
 exports.userRouter.post("/signin", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -74,7 +74,7 @@ exports.userRouter.post("/signin", (req, res) => __awaiter(void 0, void 0, void 
         token: token
     });
 }));
-exports.userRouter.get("/user", middleware_1.authMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.userRouter.get("/", middleware_1.authMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     //fix the type
     //@ts-ignore
     const id = req.id;
