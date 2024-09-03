@@ -8,7 +8,9 @@ export default function Appbar() {
   const router = useRouter();
   return (
     <div className='flex border-b justify-between items-center p-4'>
-      <div className='text-2xl font-extrabold'>
+      <div className='text-2xl font-extrabold cursor-pointer' onClick={()=>{
+        router.push("/")
+      }}>
         Zapier
       </div>
       <div className='flex'>
