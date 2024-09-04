@@ -3,9 +3,16 @@ import Appbar from '@/components/Appbar'
 import PrimaryButton from '@/components/buttons/PrimaryButton'
 import CheckFeature from '@/components/CheckFeature'
 import Input from '@/components/Input'
-import React from 'react'
+import { useState } from 'react'
+import { BACKEND_URL } from '../config'
+import axios from 'axios'
+import { useRouter } from 'next/navigation'
 
-export default function page() {
+export default function Page() {
+  const [name, setName]=useState("");
+  const [email, setEmail]=useState("");
+  const [password, setPassword]=useState("");
+  const router=useRouter();
   return (
     <div>
       <Appbar />
@@ -28,17 +35,22 @@ export default function page() {
 
         <div className='flex-1 pt-6 pb-6 px-4 mt-12 border rounded'>
           <Input type='text' label='Name' placeholder='Your Name' onChange={(e) => {
-
+            setName(e.target.value)
           }} />
           <Input type='text' label='Email' placeholder='Your Email' onChange={(e) => {
-
+            setEmail(e.target.value)
           }} />
           <Input type='password' label='Password' placeholder='Your Password' onChange={(e) => {
-
+            setPassword(e.target.value)
           }} />
           <div className='pt-4'>
-            <PrimaryButton size='big' onClick={() => {
-
+            <PrimaryButton size='big' onClick={async() => {
+             const response= await axios.post(`${BACKEND_URL}/api/v1/user/signup`,{
+                name:name,
+                email:email,
+                password:password
+              })
+              router.push("/login")
             }} >Get started free</PrimaryButton>
           </div>
         </div>
