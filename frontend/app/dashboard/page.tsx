@@ -4,6 +4,9 @@ import DarkButton from '@/components/buttons/DarkButton'
 import axios from 'axios';
 import { useEffect, useState } from 'react'
 import { BACKEND_URL } from '../config';
+import LinkButton from '@/components/buttons/LinkButton';
+import { useRouter } from 'next/navigation';
+
 
 interface Zap {
   "id": string,
@@ -19,22 +22,31 @@ interface Zap {
       "id": string,
       "name": string
     }
-  }[]
+  }[],
+  "trigger": {
+    "id": string,
+    "zapId": string,
+    "availableTriggerId": string,
+    "type": {
+      "id": string,
+      "name": string
+    }
+  }
 }
 
 function useZaps() {
   const [loading, setLoading] = useState(true);
   const [zaps, setZaps] = useState<Zap[]>([])
   useEffect(() => {
-    axios.get(`${BACKEND_URL}/api/v1/zap`,{
-      headers:{
-        "Authorization":localStorage.getItem("token")
+    axios.get(`${BACKEND_URL}/api/v1/zap`, {
+      headers: {
+        "Authorization": localStorage.getItem("token")
       }
     })
-        .then(res=>{
-          setZaps(res.data.zaps)
-          setLoading(false)
-        })
+      .then(res => {
+        setZaps(res.data.zaps)
+        setLoading(false)
+      })
   }, [])
   return {
     loading,
@@ -43,7 +55,8 @@ function useZaps() {
 }
 
 export default function Page() {
-  const {loading,zaps}=useZaps()
+  const { loading, zaps } = useZaps()
+  const router = useRouter();
   return (
     <div>
       <Appbar />
@@ -54,35 +67,38 @@ export default function Page() {
               My Zaps
             </div>
             <DarkButton onClick={() => {
-
+              router.push("/zap/create")
             }} size='big'>Create</DarkButton>
           </div>
         </div>
       </div>
-      {loading ? "Loading": <ZapTable zaps={zaps}/>}
+      {loading ? "Loading" : <div className='flex justify-center'> <ZapTable zaps={zaps} /></div>}
 
     </div>
   )
 }
 
-function ZapTable({zaps}:{zaps:Zap[]}){
-  return <table className="table-auto">
-  <thead>
-    <tr>
-      <th></th>
-      <th>Name</th>
-      <th>Last Edit</th>
-      <th>Running</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>The Sliding Mr. Bones (Next Stop, Pottersville)</td>
-      <td>Malcolm Lockyer</td>
-      <td>1961</td>
-      <td>1961</td>
-      <td>1961</td>
-    </tr>
-  </tbody>
-</table>
+function ZapTable({ zaps }: { zaps: Zap[] }) {
+  const router = useRouter();
+  return <div>
+    <div className='flex p-8 max-w-screen-lg w-full'>
+
+      <div className='flex-1'>Name</div>
+      <div className='flex-1'>Last Edit</div>
+      <div className='flex-1'>Running</div>
+      <div className='flex-1'>Go</div>
+
+    </div>
+    {
+      zaps.map(z => <div className='flex border-b border-t py-4' key={z.id}>
+        <div className='flex-1'>{z.trigger.type.name} {z.actions.map(x => x.type.name + " ")}</div>
+        <div className='flex-1'>{z.id}</div>
+        <div className='flex-1'>September 5, 2024</div>
+        <div className='flex-1'><LinkButton onClick={() => {
+          router.push("/zap/" + z.id)
+        }}>Go</LinkButton></div>
+
+      </div>)
+    }
+  </div>
 }
