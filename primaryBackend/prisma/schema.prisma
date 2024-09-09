@@ -28,7 +28,7 @@ model Zap {
   trigger   Trigger?
   actions   Action[]
   zapRuns   ZapRun[]
-  user      User     @relation(fields: [userId],references: [id])
+  user      User     @relation(fields: [userId], references: [id])
 }
 
 model Trigger {
@@ -51,12 +51,14 @@ model Action {
 model AvailableAction {
   id      String   @id @default(uuid())
   name    String
+  image   String
   actions Action[]
 }
 
 model AvailableTrigger {
   id       String    @id @default(uuid())
   name     String
+  image    String
   triggers Trigger[]
 }
 
