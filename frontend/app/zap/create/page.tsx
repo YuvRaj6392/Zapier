@@ -4,6 +4,7 @@ import Appbar from '@/components/Appbar'
 import PrimaryButton from '@/components/buttons/PrimaryButton'
 import ZapCell from '@/components/ZapCell'
 import axios from 'axios'
+import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 
 function useAvailableActionsAndTriggers() {
@@ -11,16 +12,16 @@ function useAvailableActionsAndTriggers() {
   const [availableActions, setAvailableActions] = useState([]);
   const [availableTriggers, setAvailableTriggers] = useState([]);
   useEffect(() => {
-    axios.get(`${BACKEND_URL}/api/v1/trigger/available`,{
-      headers:{
-        "Authorization":localStorage.getItem("token")
+    axios.get(`${BACKEND_URL}/api/v1/trigger/available`, {
+      headers: {
+        "Authorization": localStorage.getItem("token")
       }
     })
       .then(x => setAvailableTriggers(x.data.availableTriggers))
 
-    axios.get(`${BACKEND_URL}/api/v1/action/available`,{
-      headers:{
-        "Authorization":localStorage.getItem("token")
+    axios.get(`${BACKEND_URL}/api/v1/action/available`, {
+      headers: {
+        "Authorization": localStorage.getItem("token")
       }
     })
       .then(x => setAvailableActions(x.data.availableActions))
@@ -47,10 +48,37 @@ export default function Page() {
 
   const [selectedModalIndex, setSelectedModalIndex] = useState<null | number>(null)
 
+  const router=useRouter();
+
   return (
     <div>
       <Appbar />
+
+      <div className='flex justify-end bg-slate-200 pt-4'>
+        <PrimaryButton onClick={async () => {
+          if (!selectedTrigger?.id) {
+            return;
+          }
+          const response = await axios.post(`${BACKEND_URL}/api/v1/zap`, {
+
+            "availableTriggerId": selectedTrigger?.id,
+            "triggerMetadata": {},
+            "actions": selectedActions.map(a => ({
+              "actionId": a.actionId,
+              "actionMetaData": {}
+            }))
+          }, {
+            headers: {
+              "Authorization": localStorage.getItem("token")
+            }
+          })
+          router.push("/dashboard")
+        }} >Publish</PrimaryButton>
+      </div>
+
+
       <div className="w-full min-h-screen bg-slate-200 flex flex-col justify-center">
+
 
         <div className="flex justify-center">
           <ZapCell
@@ -154,7 +182,7 @@ function Modal({ index, onSelect, availableItems }: { index: number, onSelect: (
           {/* Modal content */}
           <div className="p-4 md:p-5 space-y-4">
             {availableItems.map(({ id, name, image }) => {
-              return <div key={id} onClick={()=>{
+              return <div key={id} onClick={() => {
                 onSelect({
                   id,
                   name

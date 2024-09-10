@@ -4,7 +4,7 @@ import PrimaryButton from '@/components/buttons/PrimaryButton'
 import CheckFeature from '@/components/CheckFeature'
 import Input from '@/components/Input'
 import { useRouter } from 'next/navigation'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { BACKEND_URL } from '../config'
 import axios from 'axios'
 
@@ -12,6 +12,11 @@ export default function Page() {
   const [email,setEmail]=useState("");
   const [password,setPassword]=useState("");
   const router=useRouter();
+  useEffect(()=>{
+    if(localStorage.getItem("token")){
+      router.push("/dashboard")
+    }
+  },[])
   return (
     <div>
       <Appbar />
