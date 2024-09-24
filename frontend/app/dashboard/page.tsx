@@ -94,8 +94,8 @@ function ZapTable({ zaps }: { zaps: Zap[] }) {
     </div>
     {
       zaps.map(z => <div className='flex border-b border-t py-4' key={z.id}>
-        <div className='flex-1 flex'><img src={z.trigger.type.image} width={30} /> {z.actions.map(x => 
-        <img src={x.type.image} width={30} />)}</div>
+        <div className='flex-1 flex'><img src={z.trigger.type.image} className="w-[30px] h-[30px]" /> {z.actions.map(x => 
+        <img src={x.type.image} className="w-[30px] h-[30px]" />)}</div>
         <div className='flex-1'>{z.id}</div>
         <div className='flex-1'>September 5, 2024</div>
         <div className='flex-1'>{`${HOOKS_URL}/hooks/catch/1/${z.id}`}</div>
