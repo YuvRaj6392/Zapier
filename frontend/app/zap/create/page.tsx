@@ -48,7 +48,7 @@ export default function Page() {
 
   const [selectedModalIndex, setSelectedModalIndex] = useState<null | number>(null)
 
-  const router=useRouter();
+  const router = useRouter();
 
   return (
     <div>
@@ -152,6 +152,12 @@ export default function Page() {
 }
 
 function Modal({ index, onSelect, availableItems }: { index: number, onSelect: (props: null | { name: string, id: string }) => void, availableItems: { id: string, name: string, image: string }[] }) {
+  const [step, setStep] = useState(0)
+  const [selectedAction, setSelectedAction] = useState({})
+  const isTrigger = index != 1;
+
+
+
   return (
     <div id="default-modal" className=" fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full flex bg-opacity-70 bg-slate-100">
       <div className="relative p-4 w-full max-w-2xl max-h-full">
@@ -180,20 +186,32 @@ function Modal({ index, onSelect, availableItems }: { index: number, onSelect: (
           </div>
 
           {/* Modal content */}
+
           <div className="p-4 md:p-5 space-y-4">
-            {availableItems.map(({ id, name, image }) => {
+            {step === 1 && selectedAction === "email" && <EmailSelector />}
+            {step === 1 && selectedAction === "send-sol" && <SolanaSelector />}
+            {step === 0 && <div>{availableItems.map(({ id, name, image }) => {
               return <div key={id} onClick={() => {
-                onSelect({
-                  id,
-                  name
-                })
+                if (isTrigger) {
+                  onSelect({
+                    id,
+                    name
+                  })
+                } else {
+                  setStep(s => s + 1)
+                  setSelectedAction({
+                    id,
+                    name
+                  })
+                }
+
               }} className='flex border p-4 cursor-pointer hover:bg-slate-100'>
                 <img src={image} width={30} />
                 <div>
                   {name}
                 </div>
               </div>
-            })}
+            })}</div>}
           </div>
         </div>
       </div>
