@@ -2,6 +2,7 @@
 import { BACKEND_URL } from '@/app/config'
 import Appbar from '@/components/Appbar'
 import PrimaryButton from '@/components/buttons/PrimaryButton'
+import Input from '@/components/Input'
 import ZapCell from '@/components/ZapCell'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
@@ -153,8 +154,11 @@ export default function Page() {
 
 function Modal({ index, onSelect, availableItems }: { index: number, onSelect: (props: null | { name: string, id: string }) => void, availableItems: { id: string, name: string, image: string }[] }) {
   const [step, setStep] = useState(0)
-  const [selectedAction, setSelectedAction] = useState({})
-  const isTrigger = index != 1;
+  const [selectedAction, setSelectedAction] = useState<{
+    id:string,
+    name:string
+  }>()
+  const isTrigger = index === 1;
 
 
 
@@ -188,8 +192,8 @@ function Modal({ index, onSelect, availableItems }: { index: number, onSelect: (
           {/* Modal content */}
 
           <div className="p-4 md:p-5 space-y-4">
-            {step === 1 && selectedAction === "email" && <EmailSelector />}
-            {step === 1 && selectedAction === "send-sol" && <SolanaSelector />}
+            {step === 1 && selectedAction?.id === "email" && <EmailSelector />}
+            {step === 1 && selectedAction?.id === "send-sol" && <SolanaSelector />}
             {step === 0 && <div>{availableItems.map(({ id, name, image }) => {
               return <div key={id} onClick={() => {
                 if (isTrigger) {
@@ -217,4 +221,30 @@ function Modal({ index, onSelect, availableItems }: { index: number, onSelect: (
       </div>
     </div>
   )
+}
+
+function EmailSelector(){
+  const [email,setEmail]=useState("");
+  const [body,setBody]=useState("");
+  return <div>
+    <Input label={"To"} type={"text"} placeholder="To" onChange={(e)=>{
+      setEmail(e.target.value)
+    }}></Input>
+    <Input label={"Body"} type={"text"} placeholder="Body" onChange={(e)=>{
+      setBody(e.target.value)
+    }}></Input>
+  </div>
+}
+
+function SolanaSelector(){
+  const [address,setAddress]=useState("");
+  const [amount,setAmount]=useState("");
+  return <div>
+    <Input label={"address"} type={"text"} placeholder="address" onChange={(e)=>{
+      setAddress(e.target.value)
+    }}></Input>
+    <Input label={"amount"} type={"text"} placeholder="amount" onChange={(e)=>{
+      setAmount(e.target.value)
+    }}></Input>
+  </div>
 }
