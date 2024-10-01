@@ -16,7 +16,7 @@ export const zapCreateSchema=z.object({
   triggerMetadata:z.any().optional(),
   actions:z.array(z.object({
     actionId:z.string(),
-    actionMetaData:z.any().optional()
+    actionMetaData:z.any().optional(),
   }))
 })
 

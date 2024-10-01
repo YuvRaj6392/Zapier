@@ -44,7 +44,8 @@ export default function Page() {
   const [selectedActions, setSelectedActions] = useState<{
     index: number,
     actionId: string,
-    availableActionName: string
+    availableActionName: string,
+    metadata:any
   }[]>([])
 
   const [selectedModalIndex, setSelectedModalIndex] = useState<null | number>(null)
@@ -66,7 +67,7 @@ export default function Page() {
             "triggerMetadata": {},
             "actions": selectedActions.map(a => ({
               "actionId": a.actionId,
-              "actionMetaData": {}
+              "actionMetaData": a.metadata
             }))
           }, {
             headers: {
@@ -109,7 +110,8 @@ export default function Page() {
               {
                 index: a.length + 2,
                 actionId: "",
-                availableActionName: ""
+                availableActionName: "",
+                metadata:{}
               }
             ])
           }}>
@@ -120,7 +122,7 @@ export default function Page() {
       {selectedModalIndex !== null && (
         <Modal
           availableItems={selectedModalIndex === 1 ? availableTriggers : availableActions}
-          onSelect={(props: null | { name: string, id: string }) => {
+          onSelect={(props: null | { name: string, id: string,metadata:any }) => {
             if (props === null) {
               setSelectedModalIndex(null)
               return
@@ -137,7 +139,9 @@ export default function Page() {
                 newActions[selectedModalIndex - 2] = {
                   index: selectedModalIndex,
                   actionId: props.id,
-                  availableActionName: props.name
+                  availableActionName: props.name,
+                  metadata:props.metadata
+
                 }
                 return newActions
               })
@@ -152,7 +156,7 @@ export default function Page() {
   )
 }
 
-function Modal({ index, onSelect, availableItems }: { index: number, onSelect: (props: null | { name: string, id: string }) => void, availableItems: { id: string, name: string, image: string }[] }) {
+function Modal({ index, onSelect, availableItems }: { index: number, onSelect: (props: null | { name: string, id: string,metadata:any }) => void, availableItems: { id: string, name: string, image: string }[] }) {
   const [step, setStep] = useState(0)
   const [selectedAction, setSelectedAction] = useState<{
     id:string,
@@ -192,14 +196,25 @@ function Modal({ index, onSelect, availableItems }: { index: number, onSelect: (
           {/* Modal content */}
 
           <div className="p-4 md:p-5 space-y-4">
-            {step === 1 && selectedAction?.id === "email" && <EmailSelector />}
-            {step === 1 && selectedAction?.id === "send-sol" && <SolanaSelector />}
+            {step === 1 && selectedAction?.id === "email" && <EmailSelector setMetaData={(metadata)=>{
+               onSelect({
+                    ...selectedAction,
+                    metadata
+                  })
+            }} />}
+            {step === 1 && selectedAction?.id === "send-sol" && <SolanaSelector setMetaData={(metadata)=>{
+               onSelect({
+                    ...selectedAction,
+                    metadata
+                  })
+            }} />}
             {step === 0 && <div>{availableItems.map(({ id, name, image }) => {
               return <div key={id} onClick={() => {
                 if (isTrigger) {
                   onSelect({
                     id,
-                    name
+                    name,
+                    metadata:{}
                   })
                 } else {
                   setStep(s => s + 1)
@@ -223,7 +238,9 @@ function Modal({ index, onSelect, availableItems }: { index: number, onSelect: (
   )
 }
 
-function EmailSelector(){
+function EmailSelector({setMetaData}:{
+  setMetaData:(params:any)=>void;
+}){
   const [email,setEmail]=useState("");
   const [body,setBody]=useState("");
   return <div>
@@ -233,10 +250,20 @@ function EmailSelector(){
     <Input label={"Body"} type={"text"} placeholder="Body" onChange={(e)=>{
       setBody(e.target.value)
     }}></Input>
+    <div className='pt-4'>
+      <PrimaryButton onClick={()=>{
+      setMetaData({
+        email,
+        body
+      })
+    }}>Submit</PrimaryButton>
+    </div>
   </div>
 }
 
-function SolanaSelector(){
+function SolanaSelector({setMetaData}:{
+  setMetaData:(params:any)=>void;
+}){
   const [address,setAddress]=useState("");
   const [amount,setAmount]=useState("");
   return <div>
@@ -246,5 +273,13 @@ function SolanaSelector(){
     <Input label={"amount"} type={"text"} placeholder="amount" onChange={(e)=>{
       setAmount(e.target.value)
     }}></Input>
+    <div className='pt-4'>
+      <PrimaryButton onClick={()=>{
+      setMetaData({
+        address,
+        amount
+      })
+    }}>Submit</PrimaryButton>
+    </div>
   </div>
 }

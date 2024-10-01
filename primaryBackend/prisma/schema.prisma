@@ -36,6 +36,7 @@ model Trigger {
   zapId              String           @unique
   zap                Zap              @relation(fields: [zapId], references: [id])
   availableTriggerId String
+  metadata           Json             @default("{}")
   type               AvailableTrigger @relation(fields: [availableTriggerId], references: [id])
 }
 
@@ -44,6 +45,7 @@ model Action {
   zapId        String
   zap          Zap             @relation(fields: [zapId], references: [id])
   actionId     String
+  metadata     Json            @default("{}")
   type         AvailableAction @relation(fields: [actionId], references: [id])
   sortingOrder Int             @default(0)
 }
