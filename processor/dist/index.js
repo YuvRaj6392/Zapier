@@ -31,7 +31,7 @@ function main() {
                 topic: TOPIC_NAME,
                 messages: pendingRows.map(r => {
                     return {
-                        value: JSON.stringify({ zapRunId: r.zapRunId, stage: 0 })
+                        value: r.zapRunId
                     };
                 })
             });
@@ -42,7 +42,7 @@ function main() {
                     }
                 }
             });
-            yield new Promise(r => setTimeout(r, 500));
+            yield new Promise(r => setTimeout(r, 5000));
         }
     });
 }

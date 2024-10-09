@@ -21,6 +21,10 @@ async function main() {
         offset: message.offset,
         value: message.value?.toString(),
       });
+      if(!message.value?.toString()){
+        return;
+      }
+      const parsedValue=JSON.parse(message.value?.toString());
       //
       await new Promise((r) => setTimeout(r, 500));
       console.log('processing done')

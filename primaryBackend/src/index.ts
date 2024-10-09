@@ -22,3 +22,6 @@ app.use("/api/v1/action", actionRouter);
 app.listen(3000, () => {
   console.log(`Server is listening at port 3000`);
 });
+
+
+//npx prisma db seed

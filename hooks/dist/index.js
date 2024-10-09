@@ -42,6 +42,6 @@ app.post("/hooks/catch/:userId/:zapId", (req, res) => __awaiter(void 0, void 0, 
     });
     //push it in to a queue (kafka/redis)
 }));
-app.listen(3000, () => {
-    console.log('server is listening at 3000');
+app.listen(3002, () => {
+    console.log('server is listening at 3002');
 });
