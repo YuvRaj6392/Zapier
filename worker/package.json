@@ -11,9 +11,12 @@
   "description": "",
   "dependencies": {
     "@prisma/client": "^5.20.0",
-    "kafkajs": "^2.2.4"
+    "dotenv": "^16.4.5",
+    "kafkajs": "^2.2.4",
+    "resend": "^4.0.0"
   },
   "devDependencies": {
+    "@types/node": "^22.7.5",
     "prisma": "^5.20.0"
   }
 }
