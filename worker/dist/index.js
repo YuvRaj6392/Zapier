@@ -14,6 +14,7 @@ const client_1 = require("@prisma/client");
 const kafkajs_1 = require("kafkajs");
 const parser_1 = require("./parser");
 const email_1 = require("./email");
+const solana_1 = require("./solana");
 const prismaClient = new client_1.PrismaClient();
 const TOPIC_NAME = "zap-events";
 const kafka = new kafkajs_1.Kafka({
@@ -74,6 +75,7 @@ function main() {
                     const amount = (0, parser_1.parse)((_g = currentAction.metadata) === null || _g === void 0 ? void 0 : _g.amount, zapRunMetadata);
                     const address = (0, parser_1.parse)((_h = currentAction.metadata) === null || _h === void 0 ? void 0 : _h.address, zapRunMetadata);
                     console.log(`Sending out SOL of ${amount} to address ${address}`);
+                    (0, solana_1.sendSol)(address, amount);
                 }
                 // 
                 yield new Promise(r => setTimeout(r, 500));
